@@ -33,6 +33,7 @@ end
 group :test do
   gem "database_cleaner"
   gem "shoulda-matchers"
+  gem 'rspec-collection_matchers'
 end
 
 # Production and staging gems
