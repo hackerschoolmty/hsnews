@@ -40,7 +40,19 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
       end
     end
 
-
   end
 
+  describe "GET #show" do
+
+    before(:each) do
+      @link = FactoryGirl.create :link
+      get :show, id: @link.id
+    end
+
+    it "returns a single record" do
+      link_response = JSON.parse(response.body, symbolize_names: true)
+      expect(link_response[:link][:id]).to eq(@link.id)
+    end
+
+  end
 end
