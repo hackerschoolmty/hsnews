@@ -55,4 +55,17 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
     end
 
   end
+
+  describe "PUT/PATCH #update" do
+
+    before(:each) do
+      @link = FactoryGirl.create :link
+    end
+
+    it "updates the link 'title' to 'The new iPhone is out!'" do
+      put :update, { id: @link.id, link: {title: "The new iPhone is out!"} }
+      link_response = JSON.parse(response.body, symbolize_names: true)
+      expect(link_response[:link][:title]).to eq "The new iPhone is out!"
+    end
+  end
 end

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     api_version(:module => "V1", :header => {:name => "Accept",
                                              :value => "application/vnd.hsnews.com+json; version=1"},
                                              :defaults => {:format => :json}, :default => true) do
-    resources :links, only: [:index, :show]
+    resources :links, only: [:index, :show, :update]
     end
   end
 
