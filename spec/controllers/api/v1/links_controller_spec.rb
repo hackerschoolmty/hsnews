@@ -81,4 +81,15 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
       it { should respond_with 422 }
     end
   end
+
+  describe "DELETE #destroy" do
+    before(:each) do
+      @link = FactoryGirl.create :link
+      delete :destroy, id: @link.id
+    end
+
+    it { should respond_with 204 }
+  end
+
+
 end
