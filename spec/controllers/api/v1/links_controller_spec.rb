@@ -11,7 +11,7 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
       end
 
       it "returns 4 records" do
-        links_response = JSON.parse(response.body, symbolize_names: true)
+        links_response = json_response
         expect(links_response[:links]).to have(4).items
       end
 
@@ -35,7 +35,7 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
       end
 
       it "returns 3 records" do
-        links_response = JSON.parse(response.body, symbolize_names: true)
+        links_response = json_response
         expect(links_response[:links]).to have(3).items
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
     end
 
     it "returns a single record" do
-      link_response = JSON.parse(response.body, symbolize_names: true)
+      link_response = json_response
       expect(link_response[:link][:id]).to eq(@link.id)
     end
 
@@ -64,7 +64,7 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
 
     it "updates the link 'title' to 'The new iPhone is out!'" do
       put :update, { id: @link.id, link: {title: "The new iPhone is out!"} }
-      link_response = JSON.parse(response.body, symbolize_names: true)
+      link_response = json_response
       expect(link_response[:link][:title]).to eq "The new iPhone is out!"
     end
 
@@ -74,7 +74,7 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
       end
 
       it "with a blank title" do
-        link_response = JSON.parse(response.body, symbolize_names: true)
+        link_response = json_response
         expect(link_response[:link][:errors][:title]).to include I18n.t('errors.messages.blank')
       end
 
@@ -96,14 +96,14 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
     it "renders the link record if success" do
       #post :create, link: FactoryGirl.attributes_for(:link)
       post :create, { link: { title: "Look mom I'm hacking", url: "http://imawesome.com" } }
-      link_response = JSON.parse(response.body, symbolize_names: true)
+      link_response = json_response
       #expect(link_response[:link]).to have_key(:title)
       expect(link_response[:link][:title]).to eq "Look mom I'm hacking"
     end
 
     it "renders errors if link not saved" do
       post :create, { link: { title: "", url: "http://imawesome.com" } }
-      link_response = JSON.parse(response.body, symbolize_names: true)
+      link_response = json_response
       #expect(link_response[:link]).to have_key(:title)
       expect(link_response[:link][:errors][:title]).to include I18n.t('errors.messages.blank')
     end
