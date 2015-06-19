@@ -67,5 +67,18 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
       link_response = JSON.parse(response.body, symbolize_names: true)
       expect(link_response[:link][:title]).to eq "The new iPhone is out!"
     end
+
+    context 'when record does not update' do
+      before(:each) do
+        put :update, { id: @link.id, link: {title: ""} }
+      end
+
+      it "with a blank title" do
+        link_response = JSON.parse(response.body, symbolize_names: true)
+        expect(link_response[:link][:errors][:title]).to include I18n.t('errors.messages.blank')
+      end
+
+      it { should respond_with 422 }
+    end
   end
 end

@@ -11,9 +11,12 @@ class Api::V1::LinksController < Api::V1::BaseController
   def update
     link = Link.find(params[:id])
 
-    link.update(link_params)
-
-    render json: link
+    if link.update(link_params)
+      render json: link, status: :ok
+    else
+      render json: { link: { errors: link.errors.messages } },
+                             status: :unprocessable_entity
+    end
   end
 
   private
