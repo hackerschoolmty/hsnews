@@ -24,6 +24,17 @@ class Api::V1::LinksController < Api::V1::BaseController
     head :no_content
   end
 
+  def create
+    link = Link.new(link_params)
+
+    if link.save
+      render json: link, status: :created, location: api_link_url(link)
+    else
+      render json: { link: { errors: link.errors.messages } },
+                             status: :unprocessable_entity
+    end
+  end
+
   private
 
     def link_params
