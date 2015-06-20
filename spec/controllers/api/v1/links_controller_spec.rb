@@ -21,6 +21,8 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
       it "responds with json" do
         expect(response.content_type).to eq(Mime::JSON)
       end
+
+      it_behaves_like "paginated list"
     end
 
     context "when the search param is present" do
