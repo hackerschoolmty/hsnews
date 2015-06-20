@@ -1,4 +1,4 @@
-class Api::V1::VotesController < ApplicationController
+class Api::V1::VotesController < Api::V1::BaseController
 
   def create
     link = Link.find(params[:link_id])
