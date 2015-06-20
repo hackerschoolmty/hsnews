@@ -8,6 +8,7 @@ Rails.application.routes.draw do
                                              :defaults => {:format => :json}, :default => true) do
       resources :links, only: [:index, :show, :update, :destroy, :create] do
         resources :comments, only: [:index, :create]
+        resources :votes, only: [:create]
       end
 
       resources :comments, only: [:destroy]
