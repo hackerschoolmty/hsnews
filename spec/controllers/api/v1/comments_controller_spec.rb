@@ -44,4 +44,13 @@ RSpec.describe Api::V1::CommentsController, :type => :controller do
     end
   end
 
+  describe "DELETE #destroy" do
+    
+    it "returns a 204 http status" do
+      comment = FactoryGirl.create :comment
+      delete :destroy, id: comment.id
+
+      expect(response.response_code).to be 204
+    end
+  end
 end
