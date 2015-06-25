@@ -24,6 +24,7 @@ RSpec.describe Api::V1::SessionsController, :type => :controller do
   describe "DELETE #destroy" do
 
     before(:each) do
+      authorization_header(user.auth_token, user.email)
       delete :destroy
     end
 

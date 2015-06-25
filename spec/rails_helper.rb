@@ -50,4 +50,5 @@ RSpec.configure do |config|
 
 
   config.include Request::JsonHelpers, type: :controller
+  config.include Request::HeaderHelpers, type: :controller
 end
