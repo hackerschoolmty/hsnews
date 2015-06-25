@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_secure_password
+  has_many :links, inverse_of: :user
 
   validates :email, presence: true,
                     uniqueness: { :case_sensitive => false },

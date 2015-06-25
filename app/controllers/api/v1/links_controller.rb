@@ -1,7 +1,7 @@
 class Api::V1::LinksController < Api::V1::BaseController
 
   def index
-    links = paginate(Link.search(params[:search]))
+    links = paginate(Link.search(params[:search]).includes(:user))
     render json: links, meta: meta_pagination(links)
   end
 
