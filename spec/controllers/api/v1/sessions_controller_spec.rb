@@ -21,4 +21,13 @@ RSpec.describe Api::V1::SessionsController, :type => :controller do
     end
   end
 
+  describe "DELETE #destroy" do
+
+    before(:each) do
+      delete :destroy
+    end
+
+    it { should respond_with 204 }
+  end
+
 end

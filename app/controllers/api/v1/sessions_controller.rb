@@ -24,6 +24,12 @@ class Api::V1::SessionsController < Api::V1::BaseController
     end
   end
 
+  def destroy
+    #current_user.generate_authentication_token!
+    #current_user.save
+    head :no_content
+  end
+
   private
 
     def sign_in(user)
