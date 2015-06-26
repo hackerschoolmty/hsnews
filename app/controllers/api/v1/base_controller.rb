@@ -30,7 +30,7 @@ class Api::V1::BaseController < ApplicationController
     end
 
     #def is_owner?
-      #resource_name = request.path.split('/')[1, 2][1]
+      #resource_name = request.path.split('/')[2]
       #klass = resource_name.singularize.classify.constantize.find(params[:id])
 
       #render_unauthorized if klass.user_id != current_user.id

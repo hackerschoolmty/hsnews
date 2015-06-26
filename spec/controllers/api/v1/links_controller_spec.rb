@@ -58,35 +58,68 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
 
   describe "PUT/PATCH #update" do
 
-    before(:each) do
-      @link = FactoryGirl.create :link
-    end
+    context "when user is logged in" do
 
-    it "updates the link 'title' to 'The new iPhone is out!'" do
-      put :update, { id: @link.id, link: {title: "The new iPhone is out!"} }
-      expect(json_response[:link][:title]).to eq "The new iPhone is out!"
-    end
+      context "and the user is not owner" do
+        before(:each) do
+          @link = FactoryGirl.create :link
+          authorization_header(user.auth_token, user.email)
+          put :update, { id: @link.id, link: {title: "The new iPhone is out!"} }
+        end
 
-    context 'when record does not update' do
-      before(:each) do
-        put :update, { id: @link.id, link: {title: ""} }
+        it { should respond_with 401 }
       end
 
-      it "with a blank title" do
-        expect(json_response[:link][:errors][:title]).to include I18n.t('errors.messages.blank')
-      end
+      context "and the user is the link owner" do
 
-      it { should respond_with 422 }
+        before(:each) do
+          @link = FactoryGirl.create :link
+          user = @link.user
+          authorization_header(user.auth_token, user.email)
+        end
+
+        it "updates the link 'title' to 'The new iPhone is out!'" do
+          put :update, { id: @link.id, link: {title: "The new iPhone is out!"} }
+          expect(json_response[:link][:title]).to eq "The new iPhone is out!"
+        end
+
+        context 'when record does not update' do
+          before(:each) do
+            put :update, { id: @link.id, link: {title: ""} }
+          end
+
+          it "with a blank title" do
+            expect(json_response[:link][:errors][:title]).to include I18n.t('errors.messages.blank')
+          end
+
+          it { should respond_with 422 }
+        end
+      end
     end
   end
 
   describe "DELETE #destroy" do
-    before(:each) do
-      @link = FactoryGirl.create :link
-      delete :destroy, id: @link.id
-    end
+    context "when user is logged in" do
+      context "and is not the owner of the link" do
+        before(:each) do
+          @link = FactoryGirl.create :link
+          authorization_header(user.auth_token, user.email)
+          delete :destroy, id: @link.id
+        end
 
-    it { should respond_with 204 }
+        it { should respond_with 401 }
+      end
+      context "and is the owner of the link" do
+        before(:each) do
+          @link = FactoryGirl.create :link
+          user = @link.user
+          authorization_header(user.auth_token, user.email)
+          delete :destroy, id: @link.id
+        end
+
+        it { should respond_with 204 }
+      end
+    end
   end
 
   describe "POST #create" do
