@@ -1,5 +1,6 @@
 class Api::V1::CommentsController < Api::V1::BaseController
   before_action :authenticate!, only: [:create, :destroy]
+  before_action :is_owner?, only: [:destroy]
 
   def index
     comments = paginate(Comment.where(link_id: params[:link_id]))

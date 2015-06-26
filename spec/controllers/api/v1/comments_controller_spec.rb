@@ -63,12 +63,30 @@ RSpec.describe Api::V1::CommentsController, :type => :controller do
   end
 
   describe "DELETE #destroy" do
-    
-    it "returns a 204 http status" do
-      comment = FactoryGirl.create :comment
-      delete :destroy, id: comment.id
 
-      expect(response.response_code).to be 204
+    context "when the user is logged in" do
+      context "and the user is not the comment owner" do
+        before(:each) do
+          comment = FactoryGirl.create :comment
+          authorization_header(user.auth_token, user.email)
+          delete :destroy, id: comment.id
+        end
+
+        it { should respond_with 401 }
+      end
+
+      context "and the user is the comment owner" do
+        before(:each) do
+          comment = FactoryGirl.create :comment
+          user = comment.user
+
+          authorization_header(user.auth_token, user.email)
+          delete :destroy, id: comment.id
+        end
+
+        it { should respond_with 204 }
+      end
+
     end
   end
 end
