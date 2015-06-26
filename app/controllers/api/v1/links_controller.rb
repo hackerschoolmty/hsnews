@@ -12,7 +12,7 @@ class Api::V1::LinksController < Api::V1::BaseController
   end
 
   def update
-    link = Link.find(params[:id])
+    link = current_user.links.find(params[:id])
     
     if link.update(link_params)
       render json: link, status: :ok
