@@ -1,5 +1,6 @@
 class Api::V1::LinksController < Api::V1::BaseController
-  before_action :authenticate!, only: [:create]
+  before_action :authenticate!, only: [:create, :update, :destroy]
+  before_action :is_owner?, only: [:update, :destroy]
 
   def index
     links = paginate(Link.search(params[:search]).includes(:user))
@@ -12,7 +13,7 @@ class Api::V1::LinksController < Api::V1::BaseController
 
   def update
     link = Link.find(params[:id])
-
+    
     if link.update(link_params)
       render json: link, status: :ok
     else
@@ -22,7 +23,7 @@ class Api::V1::LinksController < Api::V1::BaseController
   end
 
   def destroy
-    Link.find(params[:id]).destroy
+    current_user.links.find(params[:id]).destroy
     head :no_content
   end
 
@@ -38,6 +39,10 @@ class Api::V1::LinksController < Api::V1::BaseController
   end
 
   private
+
+    def is_owner?
+      render_unauthorized if Link.find(params[:id]).user_id != current_user.id
+    end
 
     def link_params
       params.require(:link).permit(:title, :url)
