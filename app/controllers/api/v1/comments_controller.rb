@@ -1,4 +1,5 @@
 class Api::V1::CommentsController < Api::V1::BaseController
+  before_action :authenticate!, only: [:create, :destroy]
 
   def index
     comments = paginate(Comment.where(link_id: params[:link_id]))
@@ -24,6 +25,6 @@ class Api::V1::CommentsController < Api::V1::BaseController
   private
 
     def comment_params
-      params.require(:comment).permit(:content)
+      params.require(:comment).permit(:content).merge(user_id: current_user.id)
     end
 end
