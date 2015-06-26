@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::LinksController, :type => :controller do
+  let(:user) { FactoryGirl.create :user }
 
   describe "GET #index" do
 
@@ -90,14 +91,29 @@ RSpec.describe Api::V1::LinksController, :type => :controller do
 
   describe "POST #create" do
 
-    it "renders the link record if success" do
-      post :create, { link: { title: "Look mom I'm hacking", url: "http://imawesome.com" } }
-      expect(json_response[:link][:title]).to eq "Look mom I'm hacking"
+    context "when a user is logged in" do
+      before(:each) do
+        authorization_header(user.auth_token, user.email)
+      end
+
+      it "renders the link record if success" do
+        post :create, { link: { title: "Look mom I'm hacking", url: "http://imawesome.com" } }
+        expect(json_response[:link][:title]).to eq "Look mom I'm hacking"
+      end
+
+      it "renders errors if link not saved" do
+        post :create, { link: { title: "", url: "http://imawesome.com" } }
+        expect(json_response[:link][:errors][:title]).to include I18n.t('errors.messages.blank')
+      end
     end
 
-    it "renders errors if link not saved" do
-      post :create, { link: { title: "", url: "http://imawesome.com" } }
-      expect(json_response[:link][:errors][:title]).to include I18n.t('errors.messages.blank')
+    context "when a user is not logged in" do
+      before(:each) do
+        post :create
+      end
+
+      it { should respond_with 401 }
+
     end
   end
 end

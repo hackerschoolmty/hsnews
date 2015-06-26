@@ -1,4 +1,5 @@
 class Api::V1::LinksController < Api::V1::BaseController
+  before_action :authenticate!, only: [:create]
 
   def index
     links = paginate(Link.search(params[:search]).includes(:user))
@@ -26,7 +27,7 @@ class Api::V1::LinksController < Api::V1::BaseController
   end
 
   def create
-    link = Link.new(link_params)
+    link = current_user.links.build(link_params)
 
     if link.save
       render json: link, status: :created, location: api_link_url(link)
