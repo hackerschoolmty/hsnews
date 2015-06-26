@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::V1::BaseController
-  before_action :authenticate_with_token, only: [:destroy]
+  before_action :authenticate!, only: [:destroy]
 
   def create
     # session: {

@@ -23,12 +23,22 @@ RSpec.describe Api::V1::SessionsController, :type => :controller do
 
   describe "DELETE #destroy" do
 
-    before(:each) do
-      authorization_header(user.auth_token, user.email)
-      delete :destroy
+    context "when user is logged in" do
+      before(:each) do
+        authorization_header(user.auth_token, user.email)
+        delete :destroy
+      end
+
+      it { should respond_with 204 }
     end
 
-    it { should respond_with 204 }
+    context "when user is not logged in" do
+      before(:each) do
+        delete :destroy
+      end
+
+      it { should respond_with 401 }
+    end
   end
 
 end
