@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 
-ruby "2.2.1"
+ruby "2.2.2"
 
 gem "versionist"
 gem "active_model_serializers", github: "rails-api/active_model_serializers", branch: "0-8-stable"
-        
+
 
 gem "rails", "4.2.1"
 gem "delayed_job_active_record"
@@ -16,6 +16,8 @@ gem "uglifier", ">= 1.3.0"
 gem "puma"
 gem "kaminari"
 gem "bcrypt"
+gem "foreman"
+gem "rack-cors", :require => "rack/cors"
 
 group :development do
   gem "spring"

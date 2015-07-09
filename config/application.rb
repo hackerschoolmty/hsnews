@@ -36,7 +36,7 @@ module Hsnews
 
     # ActiveJob Configuration
     config.active_job.queue_adapter = :delayed_job
-        
+
     # don't generate RSpec tests for views and helpers
     config.generators do |g|
       g.test_framework :rspec, fixture: true
@@ -47,8 +47,17 @@ module Hsnews
       g.javascripts false
       g.helper false
     end
-    
+
     config.autoload_paths += %W(#{config.root}/lib)
-        
+
+    config.middleware.use "Rack::Cors" do
+      allow do
+        origins "*"
+        resource '/api/*',
+          :headers => :any,
+          :methods => [:get, :post, :delete, :put, :options, :head],
+          :max_age => 0
+      end
+    end
   end
 end
