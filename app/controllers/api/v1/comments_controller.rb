@@ -8,7 +8,7 @@ class Api::V1::CommentsController < Api::V1::BaseController
   end
 
   def create
-    link = Link.find(params[:link_id])
+    link = Link.find(comment_params[:link_id])
     comment = link.comments.build(comment_params)
 
     if comment.save
@@ -26,6 +26,6 @@ class Api::V1::CommentsController < Api::V1::BaseController
   private
 
     def comment_params
-      params.require(:comment).permit(:content).merge(user_id: current_user.id)
+      params.require(:comment).permit(:content, :link_id).merge(user_id: current_user.id)
     end
 end

@@ -19,7 +19,7 @@ class Api::V1::SessionsController < Api::V1::BaseController
     if user.present? && user.authenticate(user_password)
       sign_in user
 
-      render json: user, status: :ok
+      render json: { id: user.id, token: user.auth_token, email: user.email }, status: :ok
     else
       render json: { session: { errors: "Invalid email or password" }}, status: :unprocessable_entity
     end

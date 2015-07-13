@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       end
 
       resources :users, only: [:create]
-      resources :comments, only: [:destroy]
+      resources :comments, only: [:destroy, :create]
       resources :sessions, only: [:create]
 
       delete "sessions/sign_out" => "sessions#destroy"
